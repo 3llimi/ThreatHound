@@ -1,14 +1,12 @@
-version: "3.8"
-
 services:
   elasticsearch:
-    image: elasticsearch:8.5.0
+    image: elasticsearch:${STACK_VERSION}
     container_name: es-core
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
     ports:
-      - "9200:9200" 
+      - "${ES_PORT}:9200"
     networks:
       - elk
     logging:
@@ -18,12 +16,13 @@ services:
         max-file: "3"
 
   logstash:
-    image: logstash:8.5.0
+    image: logstash:${STACK_VERSION}
     container_name: ls-core
     depends_on:
       - elasticsearch
     ports:
-      - "5044:5044"  
+      - "5044:5044"
+      - "1514:1514/udp"  # For Wazuh alerts
     volumes:
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
     networks:
@@ -35,12 +34,12 @@ services:
         max-file: "3"
 
   kibana:
-    image: kibana:8.5.0
+    image: kibana:${STACK_VERSION}
     container_name: kb-core
     depends_on:
       - elasticsearch
     ports:
-      - "5601:5601" 
+      - "${KIBANA_PORT}:5601"
     networks:
       - elk
     logging:
@@ -49,8 +48,21 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  wazuh-manager:
+    image: wazuh/wazuh-manager:4.12.0
+    container_name: wazuh-manager
+    ports:
+      - "1515:1515"         # Wazuh cluster communication (TCP)
+      - "55000:55000"       # Wazuh API
+      - "1514:1514/udp"     # Wazuh syslog port (UDP)
+    environment:
+      - WAZUH_CLUSTER_NAME=wazuh-cluster
+      - WAZUH_ENABLE_API=yes
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
 networks:
   elk:
     driver: bridge
-#    internal: true  This prevents external access, remove if needed for localhost
-
