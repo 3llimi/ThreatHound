@@ -7,9 +7,8 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
-      - "9200:9200"
+      - "9200:9200" 
     networks:
       - elk
     logging:
@@ -24,7 +23,7 @@ services:
     depends_on:
       - elasticsearch
     ports:
-      - "5044:5044"
+      - "5044:5044"  
     volumes:
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
     networks:
@@ -41,35 +40,7 @@ services:
     depends_on:
       - elasticsearch
     ports:
-      - "5601:5601"
-    networks:
-      - elk
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-
-  wazuh:
-    image: wazuh/wazuh:3.13.6_7.9.2
-    container_name: wazuh-manager
-    ports:
-      - "1514:1514/udp"
-      - "1515:1515"
-      - "55000:55000"
-    environment:
-      - WAZUH_CLUSTER_NAME=wazuh-cluster
-      - WAZUH_ENABLE_API=yes
-    networks:
-      - elk
-    depends_on:
-      - elasticsearch
-
-  web:
-    image: nginx:alpine
-    container_name: web-victim
-    ports:
-      - "8080:80"
+      - "5601:5601" 
     networks:
       - elk
     logging:
@@ -81,3 +52,5 @@ services:
 networks:
   elk:
     driver: bridge
+#    internal: true  This prevents external access, remove if needed for localhost
+
