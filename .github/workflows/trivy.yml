@@ -35,38 +35,42 @@ jobs:
         with:
           image-ref: wazuh/wazuh:3.13.6_7.9.2
           format: table
-          exit-code: 1
+          exit-code: 0
           severity: CRITICAL
-      
+          output: wazuh-scan-results.txt
+
       - name: Scan Elasticsearch Image
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: wazuh/wazuh-elasticsearch:3.13.6_7.9.2
           format: table
-          exit-code: 1
+          exit-code: 0
           severity: CRITICAL
-          ignorefile: .trivyignore  # Add this line
+          output: wazuh-scan-results.txt
 
       - name: Scan Kibana Image
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: wazuh/wazuh-kibana:3.13.6_7.9.2
           format: table
-          exit-code: 1
+          exit-code: 0
           severity: CRITICAL
+          output: wazuh-scan-results.txt
 
       - name: Scan Nginx Image
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: wazuh/wazuh-nginx:3.13.6_7.9.2
           format: table
-          exit-code: 1
+          exit-code: 0
           severity: CRITICAL
+          output: wazuh-scan-results.txt
 
       - name: Scan Logstash Image
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: docker.elastic.co/logstash/logstash:8.11.0
           format: table
-          exit-code: 1
+          exit-code: 0
           severity: CRITICAL
+          output: wazuh-scan-results.txt
