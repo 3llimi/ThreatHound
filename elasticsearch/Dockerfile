@@ -1,5 +1,4 @@
-# Wazuh Docker Copyright (C) 2020 Wazuh Inc. (License GPLv2)
-ARG ELASTIC_VERSION=7.6.2
+ARG ELASTIC_VERSION=7.17.16
 FROM docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
 ARG ELASTIC_VERSION
 ARG S3_PLUGIN_URL="https://artifacts.elastic.co/downloads/elasticsearch-plugins/repository-s3/repository-s3-${ELASTIC_VERSION}.zip"
@@ -16,11 +15,9 @@ ENV XPACK_ML="true"
 
 ENV ENABLE_CONFIGURE_S3="false"
 
-ARG TEMPLATE_VERSION=v3.12.2
+# This is legacy and may be removed if unused
+ARG TEMPLATE_VERSION=v4.12.0
 
-# Elasticearch cluster configuration environment variables
-# If ELASTIC_CLUSTER is set to "true" the following variables will be added to the Elasticsearch configuration
-# CLUSTER_INITIAL_MASTER_NODES set to own node by default.
 ENV ELASTIC_CLUSTER="false" \
     CLUSTER_NAME="wazuh" \
     CLUSTER_NODE_MASTER="false" \
@@ -36,11 +33,9 @@ ENV ELASTIC_CLUSTER="false" \
     CLUSTER_INITIAL_MASTER_NODES="wazuh-elasticsearch"
 
 COPY config/entrypoint.sh /entrypoint.sh
-
 RUN chmod 755 /entrypoint.sh
 
 COPY --chown=elasticsearch:elasticsearch ./config/load_settings.sh ./
-
 RUN chmod +x ./load_settings.sh
 
 RUN bin/elasticsearch-plugin install --batch $S3_PLUGIN_URL
