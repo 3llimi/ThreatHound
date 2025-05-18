@@ -1,5 +1,4 @@
 #!/bin/bash
-# Wazuh Docker Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 
 set -e
 
@@ -13,15 +12,7 @@ else
 fi
 
 # Setting users credentials.
-# In order to set NGINX_CREDENTIALS, before "docker-compose up -d" run (a or b):
-#
-# a) export NGINX_CREDENTIALS="user1:pass1;user2:pass2;" or
-#    export NGINX_CREDENTIALS="user1:pass1;user2:pass2"
-#
-# b) Set NGINX_CREDENTIALS in docker-compose.yml:
-#    NGINX_CREDENTIALS=user1:pass1;user2:pass2; or
-#    NGINX_CREDENTIALS=user1:pass1;user2:pass2
-#
+
 if [ ! -f /etc/nginx/conf.d/kibana.htpasswd ]; then
   echo "Setting users credentials"
   if [ ! -z "$NGINX_CREDENTIALS" ]; then

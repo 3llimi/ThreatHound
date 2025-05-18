@@ -1,4 +1,4 @@
-name: “Container Image Security Scan”
+name: Trivy Container Image Security Scan
 
 on:
   push

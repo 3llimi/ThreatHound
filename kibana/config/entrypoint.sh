@@ -1,11 +1,8 @@
 #!/bin/bash
-# Wazuh Docker Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 
 set -e
 
-##############################################################################
 # Waiting for elasticsearch
-##############################################################################
 
 if [ "x${ELASTICSEARCH_URL}" = "x" ]; then
   el_url="http://elasticsearch:9200"
@@ -29,9 +26,7 @@ sleep 2
 >&2 echo "Elasticsearch is up."
 
 
-##############################################################################
 # Waiting for wazuh alerts template
-##############################################################################
 
 strlen=0
 

@@ -1,10 +1,9 @@
 #!/bin/bash
-# Wazuh Docker Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 
 wazuh_url="${WAZUH_API_URL:-https://wazuh}"
 wazuh_port="${API_PORT:-55000}"
-api_user="${API_USER:-foo}"
-api_password="${API_PASS:-bar}"
+api_user="${API_USER:-one}"
+api_password="${API_PASS:-two}"
 
 kibana_config_file="/usr/share/kibana/optimize/wazuh/config/wazuh.yml"
 mkdir -p /usr/share/kibana/optimize/wazuh/config/
@@ -46,7 +45,6 @@ do
     fi
 done
 
-# remove default API entry (new in 3.11.0_7.5.1)
 sed -ie '/- default:/,+4d' $kibana_config_file
 
 CONFIG_CODE=$(curl -s -o /dev/null -w "%{http_code}" -XGET $el_url/.wazuh/_doc/1513629884013 ${auth})

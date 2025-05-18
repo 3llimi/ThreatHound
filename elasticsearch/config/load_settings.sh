@@ -1,5 +1,4 @@
 #!/bin/bash
-# Wazuh Docker Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 
 set -e
 
@@ -20,7 +19,6 @@ done
 >&2 echo "Elastic is up - executing command"
 
 if [ $ENABLE_CONFIGURE_S3 ]; then
-  #Wait for Elasticsearch to be ready to create the repository
   sleep 10
   IP_PORT="${ELASTICSEARCH_IP}:${ELASTICSEARCH_PORT}"
 
@@ -47,7 +45,6 @@ curl -XPUT "$el_url/_cluster/settings" ${auth} -H 'Content-Type: application/jso
 }
 '
 
-# Set cluster delayed timeout when node falls
 curl -X PUT "$el_url/_all/_settings" -H 'Content-Type: application/json' -d'
 {
   "settings": {

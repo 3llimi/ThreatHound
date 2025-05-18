@@ -1,5 +1,4 @@
 #!/bin/bash
-# Wazuh Docker Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 
 WAZUH_MAJOR=3
 

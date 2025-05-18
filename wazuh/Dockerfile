@@ -3,8 +3,8 @@ FROM phusion/baseimage:latest
 ARG FILEBEAT_VERSION=9.0.1
 ARG WAZUH_VERSION=4.12.0-1
 
-ENV API_USER="admin" \
-    API_PASS="admin"
+ENV API_USER="one" \
+    API_PASS="two"
 
 # Set repositories.
 RUN set -x && \
@@ -31,7 +31,6 @@ RUN apt-get update && \
     rm -f /var/ossec/logs/firewall/*/*/*.log && \
     rm -f /var/ossec/logs/firewall/*/*/*.json
 
-# Adding first run script and entrypoint
 COPY config/data_dirs.env /data_dirs.env
 COPY config/init.bash /init.bash
 RUN mkdir /entrypoint-scripts
@@ -52,16 +51,13 @@ RUN chmod 755 /init.bash && \
 COPY config/filebeat.yml /etc/filebeat/
 RUN chmod go-w /etc/filebeat/filebeat.yml
 
-# Setting volumes
 VOLUME ["/var/ossec/data"]
 VOLUME ["/etc/filebeat"]
 VOLUME ["/etc/postfix"]
 VOLUME ["/var/lib/filebeat"]
 
-# Services ports
 EXPOSE 55000/tcp 1514/udp 1515/tcp 514/udp 1516/tcp
 
-# Adding services
 RUN mkdir /etc/service/wazuh && \
     mkdir /etc/service/wazuh-api && \
     mkdir /etc/service/postfix && \
@@ -77,5 +73,4 @@ RUN chmod +x /etc/service/wazuh-api/run && \
     chmod +x /etc/service/postfix/run && \
     chmod +x /etc/service/filebeat/run
 
-# Run all services
 ENTRYPOINT ["/entrypoint.sh"]

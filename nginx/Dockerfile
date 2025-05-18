@@ -1,4 +1,3 @@
-# Wazuh Docker Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 FROM nginx:latest
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -13,7 +12,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 VOLUME ["/etc/nginx/conf.d"]
 
-ENV NGINX_NAME="admin" \
-    NGINX_PWD="admin"
+ENV NGINX_NAME="one" \
+    NGINX_PWD="two"
 
 ENTRYPOINT [ "/entrypoint.sh" ]

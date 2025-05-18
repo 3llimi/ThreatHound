@@ -1,4 +1,3 @@
-# Wazuh Docker Copyright (C) 2020 Wazuh Inc. (License GPLv2)
 FROM docker.elastic.co/kibana/kibana:8.18.1
 USER kibana
 ARG ELASTIC_VERSION=8.18.1

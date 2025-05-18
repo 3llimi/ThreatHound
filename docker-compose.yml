@@ -59,16 +59,14 @@ services:
       - ./logstash/config/:/usr/share/logstash/config:ro
       - ./logstash/pipeline/:/usr/share/logstash/pipeline:ro
       - ./logstash/config/logstash.keystore:/usr/share/logstash/config/logstash.keystore:ro
-      # mount Wazuh alerts.json
       - /home/bidrift/repos/ThreatHound/wazuh/alerts:/var/ossec/logs/alerts:ro
     ports:
-      - "5044:5044"   # if you also want Beats input
+      - "5044:5044"   
       - "9600:9600"
     depends_on:
       - elasticsearch
     environment:
       LS_JAVA_OPTS: "-Xms1g -Xmx1g"
-      # pass keystore password if you protected it
       LOGSTASH_KEYSTORE_PASSWORD_FILE: /usr/share/logstash/config/keystore.pass
       LOGSTASH_KEYSTORE_PASS: "${LOGSTASH_KEYSTORE_PASS}"
       ELASTIC_PASSWORD: "${ELASTIC_PASSWORD}"
