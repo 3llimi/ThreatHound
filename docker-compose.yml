@@ -10,10 +10,7 @@ services:
       - "55000:55000"
 
   elasticsearch:
-    build:
-      context: ./elasticsearch
-      dockerfile: Dockerfile
-    image: mypatched/wazuh-elasticsearch:secure
+    image: wazuh/wazuh-elasticsearch:3.13.6_7.9.2
     hostname: elasticsearch
     restart: always
     ports:
