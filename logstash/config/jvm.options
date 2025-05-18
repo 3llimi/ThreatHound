@@ -1,0 +1,10 @@
+## JVM configuration
+
+# Xms and Xmx control heap size
+-Xms1g
+-Xmx1g
+
+# GC settings
+-XX:+UseG1GC
+-XX:InitiatingHeapOccupancyPercent=75
+# …add any other defaults from upstream
