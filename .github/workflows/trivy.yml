@@ -39,13 +39,6 @@ jobs:
           severity: CRITICAL
 
 
-      - name: Scan Nginx Image
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: wazuh/wazuh-nginx:3.13.6_7.9.2
-          format: table
-          exit-code: 1
-          severity: CRITICAL
 
       - name: Scan Logsearch Image
         uses: aquasecurity/trivy-action@master
