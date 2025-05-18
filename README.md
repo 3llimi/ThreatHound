@@ -29,7 +29,7 @@ ThreatHound is a scalable, containerized security monitoring solution for intern
 ---
 
 ## 📋 Architecture Overview
-![Alt Text](https://drive.google.com/uc?export=view&id=1YH-UgdqM0LKE4p8YrBkkup0qXQBrTOO8)
+![Alt Text](https://drive.google.com/uc?export=view&id=1mq6WZqvZBjYuuAQdrtgZ3puTy7rlPKMo)
 
 
 1. **Agents** collect system logs and forward them to the Wazuh Manager.
@@ -44,7 +44,6 @@ ThreatHound is a scalable, containerized security monitoring solution for intern
 
 * Docker & Docker Compose (v2.x)
 * Git (v2.x)
-* GitLab Runner (for CI/CD)
 * (Optional) Hydra & Nmap for threat simulation scripts
 
 ---
@@ -75,30 +74,34 @@ ThreatHound is a scalable, containerized security monitoring solution for intern
 
    ```bash
    docker ps
-   docker logs wazuh-manager
    ```
 
 5. **Access the UI**:
 
-   * Kibana: [http://localhost:5601](http://localhost:5601)
-   * Wazuh API: [http://localhost:55000](http://localhost:55000)
+   * Kibana: [http://localhost](http://localhost)
 
+6. **Creating an agent**:
+   * Now, you will see Kibana interface. Navigate to wazuh dashboard in kibana where informatoin about agents will be displayed. Create new agent with relevant configuration.
+7. **Monitor your network**
 ---
+
 
 ## ▶️ Running Threat Simulations
 
 1. **SSH Brute‑Force (Hydra)**:
 
    ```bash
-   cd simulations/ssh
-   ./run_bruteforce.sh --target 192.168.100.10 --attempts 50
+   cd scripts
+   chmod +x ssh_bruteforce.sh
+   ./ssh_bruteforce.sh
    ```
 
 2. **Port Scanning (Nmap)**:
 
    ```bash
-   cd simulations/portscan
-   ./run_scan.sh --network 192.168.100.0/24
+   cd scripts
+   chmod +x port_scan.sh
+   ./port_scan.sh
    ```
 
 Alerts and events appear in Kibana within \~25 seconds on average.
@@ -125,20 +128,6 @@ ThreatHound/
 
 ---
 
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository.
-2. Create a feature branch: `git checkout -b feature/my-feature`.
-3. Commit your changes with clear messages.
-4. Push to your branch: `git push origin feature/my-feature`.
-5. Open a Pull Request against `main`.
-
-Ensure your code passes CI checks and includes relevant tests or documentation.
-
----
-
 ## 🧑‍💻 Authors & Acknowledgments
 
 * Ahmed Baha Eddine Alimi
@@ -146,10 +135,7 @@ Ensure your code passes CI checks and includes relevant tests or documentation.
 * Yusuf Abdughafforzoda
 * Anvar Gelimov
 
-Project Report & Demo Video: [Link to PDF report](https://example.com/report.pdf) | [Demo Video](https://example.com/demo)
+Demo Video: [Demo Video](https://example.com/demo)
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
