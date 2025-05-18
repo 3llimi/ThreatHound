@@ -1,95 +1,52 @@
-version: "3.8"
-
 services:
-  elasticsearch:
-    image: elasticsearch:8.5.0
-    container_name: es-core
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
+  wazuh:
+    image: wazuh/wazuh:3.13.6_7.9.2
+    hostname: wazuh-manager
+    restart: always
     ports:
-      - "9200:9200" 
-    networks:
-      - elk
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+      - "1514:1514/udp"
+      - "1515:1515"
+      - "514:514/udp"
+      - "55000:55000"
 
-  logstash:
-    image: logstash:8.5.0
-    container_name: ls-core
-    depends_on:
-      - elasticsearch
+  elasticsearch:
+    image: wazuh/wazuh-elasticsearch:3.13.6_7.9.2
+    hostname: elasticsearch
+    restart: always
     ports:
-      - "5044:5044"  
-    volumes:
-      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
-    networks:
-      - elk
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+      - "9200:9200"
+    environment:
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - ELASTIC_CLUSTER=true
+      - CLUSTER_NODE_MASTER=true
+      - CLUSTER_MASTER_NODE_NAME=es01
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 2g
 
   kibana:
-    image: kibana:8.5.0
-    container_name: kb-core
+    image: wazuh/wazuh-kibana:3.13.6_7.9.2
+    hostname: kibana
+    restart: always
     depends_on:
       - elasticsearch
-    ports:
-      - "5601:5601" 
-    networks:
-      - elk
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-  wazuh-manager:
-    image: wazuh/wazuh-manager:4.12.0
-    container_name: wazuh-manager
-    ports:
-      - "1515:1515"         # Wazuh cluster communication (TCP)
-      - "55000:55000"       # Wazuh API
-      - "1514:1514/udp"     # Wazuh syslog port (UDP)
-    environment:
-      - WAZUH_CLUSTER_NAME=wazuh-cluster
-      - WAZUH_ENABLE_API=yes
-    networks:
-      - elk
-    depends_on:
-      - elasticsearch
-  wazuh-agent:
-    image: kennyopennix/wazuh-agent:4.11.1
-    container_name: wazuh-agent
-    environment:
-      - WAZUH_MANAGER=wazuh-manager
-      - WAZUH_REGISTRATION_SERVER=wazuh-manager
-    volumes:
-      - /:/host
-      - /var/log:/var/log
-    privileged: true
-    networks:
-      - elk
-    depends_on:
-      - wazuh-manager
+    links:
+      - elasticsearch:elasticsearch
+      - wazuh:wazuh
 
   nginx:
-    image: nginx:latest
-    container_name: nginx-web
+    image: wazuh/wazuh-nginx:3.13.6_7.9.2
+    hostname: nginx
+    restart: always
+    environment:
+      - NGINX_PORT=443
+      - NGINX_CREDENTIALS
     ports:
       - "80:80"
-    networks:
-      - elk
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-networks:
-  elk:
-    driver: bridge
-#    internal: true  This prevents external access, remove if needed for localhost
+      - "443:443"
+    depends_on:
+      - kibana
+    links:
+      - kibana:kibana
