@@ -1,0 +1,71 @@
+name: “Container Image Security Scan”
+
+on:
+  push
+
+jobs:
+  trivy-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Set up Docker compose
+        uses: KengoTODA/actions-setup-docker-compose@v1
+        with:
+          version: '2.14.2'
+
+      - name: Build services using docker-compose
+        uses: hoverkraft-tech/compose-action@v2.2.0
+        with:
+          compose-file: docker-compose.yml
+
+      - name: Install Trivy ClI
+        uses: aquasecurity/setup-trivy@v0.2.0
+        with:
+          version: v0.61.1
+          cache: true
+
+      - name: Scan Wazuh Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: wazuh/wazuh:3.13.6_7.9.2
+          format: table
+          exit-code: 1
+          severity: CRITICAL
+      
+      - name: Scan Elasticsearch Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: wazuh/wazuh-elasticsearch:3.13.6_7.9.2
+          format: table
+          exit-code: 1
+          severity: CRITICAL
+
+      - name: Scan Kibana Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: wazuh/wazuh-kibana:3.13.6_7.9.2
+          format: table
+          exit-code: 1
+          severity: CRITICAL
+
+      - name: Scan Nginx Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: wazuh/wazuh-nginx:3.13.6_7.9.2
+          format: table
+          exit-code: 1
+          severity: CRITICAL
+
+      - name: Scan Logsearch Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: docker.elastic.co/logstash/logstash:8.11.0
+          format: table
+          exit-code: 1
+          severity: CRITICAL
