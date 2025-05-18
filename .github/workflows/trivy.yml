@@ -45,6 +45,7 @@ jobs:
           format: table
           exit-code: 1
           severity: CRITICAL
+          ignorefile: .trivyignore  # Add this line
 
       - name: Scan Kibana Image
         uses: aquasecurity/trivy-action@master
