@@ -29,20 +29,8 @@ ThreatHound is a scalable, containerized security monitoring solution for intern
 ---
 
 ## 📋 Architecture Overview
+![Alt Text](https://drive.google.com/uc?export=view&id=1YH-UgdqM0LKE4p8YrBkkup0qXQBrTOO8)
 
-```text
-┌───────────────────┐      ┌───────────────┐      ┌────────────┐
-│ Wazuh Agents      │ ──►  │ Wazuh Manager │ ──►  │ Alerting   │
-│ (Endpoints)       │      └───────────────┘      │ (AlertMgr) │
-└───────────────────┘                             └────────────┘
-            │
-            ▼
-      ELK Stack (Docker Compose)
-  ┌────────────┐   ┌──────────────┐   ┌───────────┐
-  │ Logstash   │ ─►│ Elasticsearch│ ─►│ Kibana    │
-  │ Filters    │   │ Indices      │   │ Dashboards│
-  └────────────┘   └──────────────┘   └───────────┘
-```
 
 1. **Agents** collect system logs and forward them to the Wazuh Manager.
 2. **Manager** applies detection rules and forwards events to Logstash.
@@ -121,20 +109,18 @@ Alerts and events appear in Kibana within \~25 seconds on average.
 
 ```
 ThreatHound/
-├─ .gitlab-ci.yml         # CI/CD pipeline definitions
-├─ docker-compose.yml     # Service orchestration
-├─ env.example            # Sample environment config
-├─ wazuh/                 # Wazuh manager & rules
-│  ├─ rules/              # Custom detection rules
-│  └─ decoders/           # Log decoders
-├─ elk/                   # ELK configuration
-│  ├─ logstash/           # Filter pipelines
-│  ├─ elasticsearch/      # Index templates
-│  └─ kibana/             # Dashboard definitions
-├─ simulations/           # Attack simulation scripts
-│  ├─ ssh/                # SSH brute‐force tests
-│  └─ portscan/           # Nmap scans
-└─ README.md              # Project overview (this file)
+├── .github/
+│   └── workflows/         # GitHub Actions CI definitions
+├── elasticsearch/         # Elasticsearch index templates & config
+├── kibana/                # Kibana dashboards & settings
+├── logstash/              # Logstash pipeline configurations
+├── nginx/                 # Nginx reverse‑proxy config
+├── scripts/               # Attack simulation & helper scripts
+├── wazuh/                 # Wazuh manager rules & decoders
+├── .env                   # Environment variables (ignored by Git)
+├── README.md              # Project overview and docs
+└── docker-compose.yml     # Docker‑Compose service definitions
+
 ```
 
 ---
